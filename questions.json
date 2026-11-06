@@ -1,0 +1,584 @@
+[
+  {
+    "order": 1,
+    "text": "The combination of gates shown below yields:",
+    "visual_content": "Circuit: Inputs A and B each enter a NAND gate with the two inputs of each NAND tied together; the two inverted outputs feed a final NAND gate producing output X.",
+    "options": [
+      "A) OR gate",
+      "B) NOT gate",
+      "C) XOR gate",
+      "D) NAND gate"
+    ],
+    "correct_option": "A",
+    "marks": 1
+  },
+  {
+    "order": 2,
+    "text": "For the given combination of gates, if the logic states of inputs A, B, C are: Case 1: A = B = C = 0; Case 2: A = B = 1, C = 0, then the logic states of output D are respectively:",
+    "visual_content": "Circuit: Inputs A and B feed an OR gate G1. The output of G1 and input C feed a NAND gate G2, producing final output D.",
+    "options": [
+      "A) 0, 0",
+      "B) 0, 1",
+      "C) 1, 0",
+      "D) 1, 1"
+    ],
+    "correct_option": "D",
+    "marks": 1
+  },
+  {
+    "order": 3,
+    "text": "Which logic gate with inputs A and B performs the same operation as that performed by a battery circuit containing two switches A and B connected in parallel in the path to a lamp?",
+    "visual_content": "Circuit: Switches A and B are connected in parallel. If either switch is closed (ON), the lamp glows (ON).",
+    "options": [
+      "A) NAND gate",
+      "B) OR gate",
+      "C) NOR gate",
+      "D) AND gate"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  },
+  {
+    "order": 4,
+    "text": "The logic circuit has inputs A and B each passing through a NOT gate; the two inverted outputs feed a NOR gate producing output Y. The equivalent logic operation of this circuit is:",
+    "visual_content": "Logic Expression: Y = NOT((NOT A) OR (NOT B)) = (NOT NOT A) AND (NOT NOT B) = A AND B",
+    "options": [
+      "A) OR gate",
+      "B) AND gate",
+      "C) NAND gate",
+      "D) NOR gate"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  },
+  {
+    "order": 5,
+    "text": "In a cyclotron, a charged particle of mass m and charge q accelerates inside dees under a perpendicular uniform magnetic field B. The cyclotron frequency of revolution of the particle is independent of its:",
+    "visual_content": "Formula: f = (qB) / (2πm)",
+    "options": [
+      "A) Magnetic flux density (B)",
+      "B) Charge of the particle (q)",
+      "C) Speed and orbital radius (v and r)",
+      "D) Mass of the particle (m)"
+    ],
+    "correct_option": "C",
+    "marks": 1
+  },
+  {
+    "order": 6,
+    "text": "The maximum kinetic energy of a charged particle accelerated in a cyclotron of radius R in a magnetic field B is proportional to:",
+    "visual_content": "Formula: K_max = (q²B²R²) / (2m)",
+    "options": [
+      "A) R",
+      "B) R²",
+      "C) 1 / R",
+      "D) R³"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  },
+  {
+    "order": 7,
+    "text": "A proton and an alpha particle enter a uniform perpendicular magnetic field with the same kinetic energy. The ratio of the radii of their circular paths (r_p : r_α) is:",
+    "options": [
+      "A) 1 : 1",
+      "B) 1 : 2",
+      "C) 2 : 1",
+      "D) 1 : 4"
+    ],
+    "correct_option": "A",
+    "marks": 1
+  },
+  {
+    "order": 8,
+    "text": "Two point charges +q and -q are separated by a distance 2a. The electric potential at any point on the equatorial plane of the electric dipole is:",
+    "options": [
+      "A) Maximum and positive",
+      "B) Zero",
+      "C) Dependent on distance from the midpoint",
+      "D) Inversely proportional to distance squared"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  },
+  {
+    "order": 9,
+    "text": "A car accelerates from rest at a constant rate α for some time, after which it decelerates at a constant rate β to come to rest. If the total time elapsed is t, the maximum velocity attained by the car is:",
+    "options": [
+      "A) [(α + β) / (αβ)] * t",
+      "B) [(αβ) / (α + β)] * t",
+      "C) [(α² + β²) / (αβ)] * t",
+      "D) [(αβ) / (2(α + β))] * t"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  },
+  {
+    "order": 10,
+    "text": "In a photoelectric experiment, the stopping potential for incident light of frequency ν is V₀. If the frequency of incident light is doubled, the new stopping potential will be:",
+    "options": [
+      "A) Equal to 2V₀",
+      "B) Less than 2V₀",
+      "C) More than 2V₀",
+      "D) Exactly V₀ / 2"
+    ],
+    "correct_option": "C",
+    "marks": 1
+  },
+  {
+    "order": 11,
+    "text": "A convex lens of refractive index 1.5 has a focal length of 20 cm in air. When completely immersed in water of refractive index 4/3, its focal length will become:",
+    "options": [
+      "A) 40 cm",
+      "B) 60 cm",
+      "C) 80 cm",
+      "D) 20 cm"
+    ],
+    "correct_option": "C",
+    "marks": 1
+  },
+  {
+    "order": 12,
+    "text": "An ideal heat engine operates in a Carnot cycle between temperatures 227°C and 27°C. If the engine absorbs 600 calories of heat from the source, the heat rejected to the sink per cycle is:",
+    "options": [
+      "A) 360 calories",
+      "B) 240 calories",
+      "C) 480 calories",
+      "D) 120 calories"
+    ],
+    "correct_option": "A",
+    "marks": 1
+  },
+  {
+    "order": 13,
+    "text": "A wire of resistance R is stretched uniformly such that its length increases by 10%. The percentage increase in its electrical resistance is approximately:",
+    "options": [
+      "A) 10%",
+      "B) 19%",
+      "C) 21%",
+      "D) 25%"
+    ],
+    "correct_option": "C",
+    "marks": 1
+  },
+  {
+    "order": 14,
+    "text": "The de Broglie wavelength of an electron accelerated from rest through a potential difference of V volts is approximately given by:",
+    "options": [
+      "A) λ = 12.27 / √V Å",
+      "B) λ = 1.227 / √V Å",
+      "C) λ = 122.7 / √V Å",
+      "D) λ = 0.1227 / √V Å"
+    ],
+    "correct_option": "A",
+    "marks": 1
+  },
+  {
+    "order": 15,
+    "text": "A magnetic dipole of magnetic moment M is placed in a uniform magnetic field B. The work done in rotating the dipole from stable equilibrium (θ = 0°) to unstable equilibrium (θ = 180°) is:",
+    "options": [
+      "A) Zero",
+      "B) MB",
+      "C) 2 MB",
+      "D) -MB"
+    ],
+    "correct_option": "C",
+    "marks": 1
+  },
+  {
+    "order": 16,
+    "text": "To convert a moving coil galvanometer into a voltmeter of desired range, one must connect:",
+    "options": [
+      "A) A low resistance in parallel with the coil",
+      "B) A high resistance in series with the coil",
+      "C) A low resistance in series with the coil",
+      "D) A high resistance in parallel with the coil"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  },
+  {
+    "order": 17,
+    "text": "A body of mass 2 kg moving with velocity 3 m/s collides head-on with a body of mass 1 kg moving with velocity 4 m/s in the opposite direction. If the collision is perfectly inelastic, the common velocity after collision is:",
+    "options": [
+      "A) 2/3 m/s in original direction of 2 kg mass",
+      "B) 1/3 m/s in original direction of 1 kg mass",
+      "C) 1 m/s in original direction of 2 kg mass",
+      "D) Zero"
+    ],
+    "correct_option": "A",
+    "marks": 1
+  },
+  {
+    "order": 18,
+    "text": "The ratio of the speed of an electron in the first Bohr orbit of hydrogen atom to the speed of light in vacuum is approximately equal to:",
+    "options": [
+      "A) 1 / 137",
+      "B) 1 / 237",
+      "C) 1 / 37",
+      "D) 1 / 13.7"
+    ],
+    "correct_option": "A",
+    "marks": 1
+  },
+  {
+    "order": 19,
+    "text": "In Young's double slit experiment, if the separation between the slits is halved and the distance between the slits and the screen is doubled, the fringe width will:",
+    "options": [
+      "A) Remain unchanged",
+      "B) Become two times",
+      "C) Become four times",
+      "D) Become one-fourth"
+    ],
+    "correct_option": "C",
+    "marks": 1
+  },
+  {
+    "order": 20,
+    "text": "A parallel plate capacitor with air between the plates has capacitance C. If a dielectric slab of dielectric constant K = 5 is inserted filling the entire space between the plates, the new capacitance is:",
+    "options": [
+      "A) C / 5",
+      "B) 5C",
+      "C) 25C",
+      "D) C + 5"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  },
+  {
+    "order": 21,
+    "text": "A stone is dropped from a height h. It hits the ground with a certain momentum p. If the same stone is dropped from a height 100% more than the previous height, the momentum when it hits the ground will change by:",
+    "options": [
+      "A) 100%",
+      "B) 41%",
+      "C) 50%",
+      "D) 200%"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  },
+  {
+    "order": 22,
+    "text": "The dimensions of magnetic permeability (μ₀) in terms of M, L, T, A are:",
+    "options": [
+      "A) [M L T⁻² A⁻²]",
+      "B) [M L T⁻¹ A⁻²]",
+      "C) [M L² T⁻² A⁻¹]",
+      "D) [M L T⁻² A⁻¹]"
+    ],
+    "correct_option": "A",
+    "marks": 1
+  },
+  {
+    "order": 23,
+    "text": "In an alternating current circuit containing an inductor of inductance L and a capacitor of capacitance C in series, the resonant angular frequency ω₀ is given by:",
+    "options": [
+      "A) ω₀ = √(LC)",
+      "B) ω₀ = 1 / √(LC)",
+      "C) ω₀ = 1 / (LC)",
+      "D) ω₀ = L / C"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  },
+  {
+    "order": 24,
+    "text": "A particle executes simple harmonic motion with an amplitude of 4 cm. At what displacement from the mean position are its kinetic energy and potential energy equal?",
+    "options": [
+      "A) 2 cm",
+      "B) 2√2 cm",
+      "C) √2 cm",
+      "D) 1 cm"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  },
+  {
+    "order": 25,
+    "text": "The escape velocity from the surface of the Earth is v_e. If a planet has twice the radius and eight times the mass of the Earth, the escape velocity from that planet will be:",
+    "options": [
+      "A) 2 v_e",
+      "B) 4 v_e",
+      "C) v_e",
+      "D) 8 v_e"
+    ],
+    "correct_option": "A",
+    "marks": 1
+  },
+  {
+    "order": 26,
+    "text": "An organ pipe closed at one end of length L has its fundamental frequency f. If it is opened at both ends, its fundamental frequency becomes:",
+    "options": [
+      "A) f / 2",
+      "B) 2f",
+      "C) 4f",
+      "D) f"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  },
+  {
+    "order": 27,
+    "text": "According to Lenz's law, the polarity of induced electromotive force (EMF) is such that it opposes the change in magnetic flux that produces it. This law is a direct consequence of the law of conservation of:",
+    "options": [
+      "A) Electric charge",
+      "B) Momentum",
+      "C) Energy",
+      "D) Mass"
+    ],
+    "correct_option": "C",
+    "marks": 1
+  },
+  {
+    "order": 28,
+    "text": "In a forward-biased p-n junction diode, the width of the depletion layer:",
+    "options": [
+      "A) Increases",
+      "B) Decreases",
+      "C) Remains constant",
+      "D) First increases then decreases"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  },
+  {
+    "order": 29,
+    "text": "A Zener diode is primarily designed to operate in:",
+    "options": [
+      "A) Forward bias as an amplifier",
+      "B) Reverse breakdown region as a voltage regulator",
+      "C) Forward bias as an oscillator",
+      "D) Zero bias as a switch"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  },
+  {
+    "order": 30,
+    "text": "A circular coil of radius 10 cm and 100 turns carries a current of 3.2 A. The magnetic field at the centre of the coil is (given μ₀ = 4π × 10⁻⁷ T·m/A):",
+    "options": [
+      "A) 2.01 × 10⁻³ T",
+      "B) 4.02 × 10⁻⁴ T",
+      "C) 2.01 × 10⁻⁴ T",
+      "D) 6.28 × 10⁻³ T"
+    ],
+    "correct_option": "A",
+    "marks": 1
+  },
+  {
+    "order": 31,
+    "text": "A projectile is thrown with an initial velocity u at an angle θ with the horizontal. The angle between the velocity vector and the acceleration vector at the highest point of its trajectory is:",
+    "options": [
+      "A) 0°",
+      "B) 45°",
+      "C) 90°",
+      "D) 180°"
+    ],
+    "correct_option": "C",
+    "marks": 1
+  },
+  {
+    "order": 32,
+    "text": "A spherical droplet of water of radius 1 mm is split into 10⁶ identical tiny droplets. If T is the surface tension of water, the work done in this process is:",
+    "options": [
+      "A) 4πR²T (100 - 1)",
+      "B) 4πR²T (10 - 1)",
+      "C) 4πR²T (1000 - 1)",
+      "D) Zero"
+    ],
+    "correct_option": "A",
+    "marks": 1
+  },
+  {
+    "order": 33,
+    "text": "Two moles of an ideal monoatomic gas (C_v = 3R/2) are heated from 300 K to 400 K at constant volume. The change in internal energy (ΔU) of the gas is:",
+    "options": [
+      "A) 150 R",
+      "B) 300 R",
+      "C) 600 R",
+      "D) 450 R"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  },
+  {
+    "order": 34,
+    "text": "The critical angle for total internal reflection of light from a denser medium to air is 45°. The velocity of light in the denser medium is:",
+    "options": [
+      "A) 1.5 × 10⁸ m/s",
+      "B) 2.12 × 10⁸ m/s",
+      "C) 3.0 × 10⁸ m/s",
+      "D) 0.75 × 10⁸ m/s"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  },
+  {
+    "order": 35,
+    "text": "In a series LCR circuit, R = 10 Ω, X_L = 20 Ω, and X_C = 20 Ω. The impedance of the circuit and the power factor are respectively:",
+    "options": [
+      "A) 10 Ω, 1",
+      "B) 20 Ω, 0",
+      "C) 30 Ω, 0.5",
+      "D) 10 Ω, 0"
+    ],
+    "correct_option": "A",
+    "marks": 1
+  },
+  {
+    "order": 36,
+    "text": "A radioactive sample has a half-life of 20 minutes. The fraction of the original activity remaining after 80 minutes is:",
+    "options": [
+      "A) 1 / 4",
+      "B) 1 / 8",
+      "C) 1 / 16",
+      "D) 1 / 32"
+    ],
+    "correct_option": "C",
+    "marks": 1
+  },
+  {
+    "order": 37,
+    "text": "A mass m attached to a spring of spring constant k oscillates with frequency f₁. If the mass is replaced by 4m, the new frequency of oscillation f₂ will be:",
+    "options": [
+      "A) 2 f₁",
+      "B) f₁ / 2",
+      "C) 4 f₁",
+      "D) f₁ / 4"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  },
+  {
+    "order": 38,
+    "text": "A telescope of objective focal length 100 cm and eyepiece focal length 5 cm is focused for normal adjustment. The magnifying power and tube length of the telescope are:",
+    "options": [
+      "A) 20, 105 cm",
+      "B) 500, 95 cm",
+      "C) 20, 95 cm",
+      "D) 5, 105 cm"
+    ],
+    "correct_option": "A",
+    "marks": 1
+  },
+  {
+    "order": 39,
+    "text": "The work function of Caesium is 2.14 eV. The threshold frequency for photoelectric emission in Caesium is (take h = 6.63 × 10⁻³⁴ J·s):",
+    "options": [
+      "A) 5.16 × 10¹⁴ Hz",
+      "B) 3.20 × 10¹⁴ Hz",
+      "C) 6.50 × 10¹⁴ Hz",
+      "D) 2.14 × 10¹⁴ Hz"
+    ],
+    "correct_option": "A",
+    "marks": 1
+  },
+  {
+    "order": 40,
+    "text": "An electric dipole of dipole moment p is placed in an electric field E. The torque acting on the dipole is given by the vector product:",
+    "options": [
+      "A) τ = p · E",
+      "B) τ = p × E",
+      "C) τ = E × p",
+      "D) τ = (p · E) / 2"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  },
+  {
+    "order": 41,
+    "text": "A copper wire and a silicon bar are both warmed from room temperature 300 K to 350 K. The electrical resistance of:",
+    "options": [
+      "A) Both increases",
+      "B) Both decreases",
+      "C) Copper increases while silicon decreases",
+      "D) Copper decreases while silicon increases"
+    ],
+    "correct_option": "C",
+    "marks": 1
+  },
+  {
+    "order": 42,
+    "text": "The displacement of a particle executing simple harmonic motion is given by y = 5 sin(100t + π/3) cm. The maximum velocity of the particle is:",
+    "options": [
+      "A) 500 cm/s",
+      "B) 50 cm/s",
+      "C) 100 cm/s",
+      "D) 20 cm/s"
+    ],
+    "correct_option": "A",
+    "marks": 1
+  },
+  {
+    "order": 43,
+    "text": "If two coherent light waves of intensities I and 4I interfere, the ratio of maximum to minimum intensity in the resulting interference pattern is:",
+    "options": [
+      "A) 5 : 3",
+      "B) 9 : 1",
+      "C) 25 : 9",
+      "D) 4 : 1"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  },
+  {
+    "order": 44,
+    "text": "An electromagnetic wave propagating along the +x axis has an electric field vector along the +y axis. The magnetic field vector B must point along:",
+    "options": [
+      "A) +z axis",
+      "B) -z axis",
+      "C) +x axis",
+      "D) -y axis"
+    ],
+    "correct_option": "A",
+    "marks": 1
+  },
+  {
+    "order": 45,
+    "text": "According to the de Broglie hypothesis, the wavelength λ of a particle of mass m moving with velocity v is:",
+    "options": [
+      "A) λ = h / (mv)",
+      "B) λ = (mv) / h",
+      "C) λ = h / √(2m)",
+      "D) λ = (h · v) / m"
+    ],
+    "correct_option": "A",
+    "marks": 1
+  },
+  {
+    "order": 46,
+    "text": "A body cools from 80°C to 60°C in 5 minutes in a surrounding at 20°C. Using Newton's law of cooling, the time taken to cool from 60°C to 40°C in the same surrounding will be:",
+    "options": [
+      "A) 5 minutes",
+      "B) 7.5 minutes",
+      "C) 9.1 minutes",
+      "D) 10 minutes"
+    ],
+    "correct_option": "C",
+    "marks": 1
+  },
+  {
+    "order": 47,
+    "text": "The magnetic susceptibility of a paramagnetic substance at temperature T is proportional to (Curie's Law):",
+    "options": [
+      "A) T",
+      "B) 1 / T",
+      "C) T²",
+      "D) 1 / T²"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  },
+  {
+    "order": 48,
+    "text": "In a nuclear reactor, heavy water (D₂O) or graphite is primarily used as a:",
+    "options": [
+      "A) Coolant to absorb heat",
+      "B) Moderator to slow down fast neutrons",
+      "C) Control rod to absorb neutrons",
+      "D) Nuclear fuel"
+    ],
+    "correct_option": "B",
+    "marks": 1
+  }
+]
