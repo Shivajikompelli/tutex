@@ -292,6 +292,10 @@ class MockDB {
     return this.state.questions.find((q) => q.id === id);
   }
 
+  public getQuestions(): Question[] {
+    return this.state.questions;
+  }
+
   public saveExamAnswer(submissionId: string, questionId: string, selectedOption: string) {
     const submission = this.state.submissions.find((s) => s.id === submissionId);
     if (!submission) throw new Error('Submission not found.');

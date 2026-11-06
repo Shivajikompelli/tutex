@@ -220,6 +220,21 @@ export async function registerOrResumeStudent(payload: RegistrationPayload) {
       };
     }
 
+    // Jumble questions for candidate
+    const { data: dbQuestions } = await supabase
+      .from('questions')
+      .select('id')
+      .eq('exam_id', activeExam.id);
+
+    let questionPool = dbQuestions && dbQuestions.length > 0 ? dbQuestions : [];
+    if (questionPool.length === 0) {
+      questionPool = mockDb.getQuestions().filter((q) => q.exam_id === activeExam.id || q.exam_id === 'cyclotron-neet-001');
+    }
+    const shuffled = [...questionPool].sort(() => Math.random() - 0.5);
+    const targetCount = Math.min(45, shuffled.length);
+    const selected45 = shuffled.slice(0, targetCount);
+    const questionIds = selected45.map((q: any) => q.id);
+
     // Create new submission record
     const now = new Date();
     const expiresAt = new Date(now.getTime() + activeExam.duration_minutes * 60 * 1000);
@@ -233,6 +248,8 @@ export async function registerOrResumeStudent(payload: RegistrationPayload) {
         started_at: now.toISOString(),
         expires_at: expiresAt.toISOString(),
         tab_switch_count: 0,
+        score: 0,
+        question_ids: questionIds,
       })
       .select()
       .single();
@@ -528,13 +545,12 @@ export async function finalizeSubmission(
       return mockDb.finalizeSubmission(submissionId, reason);
     }
 
-    if (submission.status !== 'in_progress') {
-      return { success: true, status: submission.status, alreadyFinalized: true };
-    }
-
     let finalStatus: SubmissionStatus = 'submitted';
     if (reason === 'timeout') finalStatus = 'auto_submitted_time';
     if (reason === 'tab_violations') finalStatus = 'auto_submitted_tabs';
+    if (submission.status !== 'in_progress') {
+      finalStatus = submission.status as SubmissionStatus;
+    }
 
     // 1. Fetch answers recorded for this submission
     const { data: answersData } = await supabase

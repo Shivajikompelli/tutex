@@ -28,6 +28,7 @@ export async function getAllSubmissionsSummary(): Promise<SubmissionAdminSummary
       .order('created_at', { ascending: false });
 
     if (subError) {
+      console.warn('[Admin Service] Supabase submissions query notice:', subError.message);
       return mockDb.getAllSubmissionsSummary();
     }
 
