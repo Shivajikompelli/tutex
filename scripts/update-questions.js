@@ -609,3 +609,4 @@ const questions = [
 
 fs.writeFileSync(path.resolve(__dirname, '../questions.json'), JSON.stringify(questions, null, 2), 'utf8');
 console.log('Successfully wrote', questions.length, 'questions to questions.json');
+

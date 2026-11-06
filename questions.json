@@ -583,18 +583,5 @@
     ],
     "correct_option": "B",
     "marks": 1
-  },
-  {
-    "order": 46,
-    "text": "The logic circuit shown below has the input waveforms 'A' and 'B' as shown. Pick out the correct output waveform:\n\nCircuit: A enters a NOT gate; B enters a NOT gate. Both inverted outputs enter a NOR gate producing output Y.",
-    "visual_content": "Logic expression: Y = NOT((NOT A) OR (NOT B)) = A AND B.\nOutput Y is HIGH (1) only when BOTH A and B are HIGH (in interval t3-t4 and interval t5-t6).",
-    "options": [
-      "A) Output waveform (a)",
-      "B) Output waveform (b)",
-      "C) Output waveform (c)",
-      "D) Output waveform (d)"
-    ],
-    "correct_option": "C",
-    "marks": 1
   }
 ]

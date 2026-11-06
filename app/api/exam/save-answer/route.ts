@@ -4,7 +4,7 @@ import { saveExamAnswer } from '@/lib/exam-service';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { submission_id, question_id, answer_text } = body;
+    const { submission_id, question_id, answer_text, selected_option } = body;
 
     if (!submission_id || !question_id) {
       return NextResponse.json(
@@ -13,10 +13,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const finalAnswer = typeof answer_text === 'string' ? answer_text : (typeof selected_option === 'string' ? selected_option : '');
+
     const result = await saveExamAnswer(
       submission_id,
       question_id,
-      typeof answer_text === 'string' ? answer_text : ''
+      finalAnswer
     );
 
     return NextResponse.json(result, { status: 200 });
