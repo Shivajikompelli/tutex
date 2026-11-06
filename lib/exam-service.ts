@@ -2,6 +2,7 @@ import { getAdminSupabase } from './supabase/server';
 import {
   RegistrationPayload,
   SubmissionStatus,
+  isOptionMatch,
 } from './types';
 import { mockDb } from './mock-db';
 
@@ -485,11 +486,36 @@ export async function finalizeSubmission(
     if (reason === 'timeout') finalStatus = 'auto_submitted_time';
     if (reason === 'tab_violations') finalStatus = 'auto_submitted_tabs';
 
+    // 1. Fetch answers recorded for this submission
+    const { data: answersData } = await supabase
+      .from('answers')
+      .select('question_id, answer_text')
+      .eq('submission_id', submissionId);
+
+    // 2. Fetch questions to evaluate score
+    const { data: questionsData } = await supabase
+      .from('questions')
+      .select('id, correct_option, marks');
+
+    const qMap: Record<string, any> = {};
+    (questionsData || []).forEach((q: any) => {
+      qMap[q.id] = q;
+    });
+
+    let calculatedScore = 0;
+    (answersData || []).forEach((a: any) => {
+      const q = qMap[a.question_id] || (mockDb as any).findQuestion?.(a.question_id);
+      if (q && isOptionMatch(a.answer_text, q.correct_option)) {
+        calculatedScore += (q.marks || 1);
+      }
+    });
+
     const { error: updateError } = await supabase
       .from('submissions')
       .update({
         status: finalStatus,
         submitted_at: new Date().toISOString(),
+        score: calculatedScore,
       })
       .eq('id', submissionId);
 
@@ -503,6 +529,7 @@ export async function finalizeSubmission(
     return {
       success: true,
       status: finalStatus,
+      score: calculatedScore,
       alreadyFinalized: false,
     };
   } catch (err: any) {

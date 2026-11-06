@@ -20,6 +20,7 @@ export async function getAllSubmissionsSummary(): Promise<SubmissionAdminSummary
         started_at,
         submitted_at,
         tab_switch_count,
+        score,
         student:students(*),
         exam:exams(*),
         answers:answers(question_id, answer_text)
@@ -48,14 +49,16 @@ export async function getAllSubmissionsSummary(): Promise<SubmissionAdminSummary
         (a: any) => a.answer_text && a.answer_text.trim().length > 0
       ).length;
 
-      let score = 0;
+      let score = typeof sub.score === 'number' ? sub.score : 0;
+      let calculatedScore = 0;
       (sub.answers || []).forEach((a: any) => {
         const q = questionMap[a.question_id];
         if (q && isOptionMatch(a.answer_text, q.correct_option)) {
-          score += (q.marks || 1);
+          calculatedScore += (q.marks || 1);
         }
       });
 
+      const finalScore = Math.max(score, calculatedScore);
       const totalQ = questionsByExam[sub.exam?.id] || 45;
 
       return {
@@ -68,7 +71,7 @@ export async function getAllSubmissionsSummary(): Promise<SubmissionAdminSummary
         exam: sub.exam,
         answered_count: answeredCount,
         total_questions: totalQ,
-        score,
+        score: finalScore,
         total_marks: totalQ * 1,
       };
     });

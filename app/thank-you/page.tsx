@@ -156,6 +156,17 @@ function ThankYouContent() {
                 </span>
               </div>
 
+              {/* Evaluated Score */}
+              <div className="flex justify-between items-center py-2 px-3 bg-indigo-50 border border-indigo-200 rounded-xl">
+                <span className="text-indigo-900 font-bold flex items-center gap-1.5">
+                  <Award className="w-4 h-4 text-indigo-600" />
+                  Calculated Score:
+                </span>
+                <span className="font-extrabold text-base text-indigo-700">
+                  {typeof submission.score === 'number' ? submission.score : 0} / {questions.length * 1 || 45}
+                </span>
+              </div>
+
               <div className="flex justify-between">
                 <span className="text-slate-500 font-medium">Tab-Switch Warnings:</span>
                 <span

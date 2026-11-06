@@ -389,8 +389,19 @@ class MockDB {
     const submission = this.state.submissions.find((s) => s.id === submissionId);
     if (!submission) throw new Error('Submission not found.');
 
+    const subAnswers = this.state.answers.filter((a) => a.submission_id === submissionId);
+    let calculatedScore = 0;
+    subAnswers.forEach((a) => {
+      const q = this.state.questions.find((item) => item.id === a.question_id);
+      if (q && isOptionMatch(a.answer_text, q.correct_option)) {
+        calculatedScore += (q.marks || 1);
+      }
+    });
+
     if (submission.status !== 'in_progress') {
-      return { success: true, status: submission.status, alreadyFinalized: true };
+      submission.score = calculatedScore;
+      this.writeState();
+      return { success: true, status: submission.status, score: calculatedScore, alreadyFinalized: true };
     }
 
     let finalStatus: SubmissionStatus = 'submitted';
@@ -399,11 +410,13 @@ class MockDB {
 
     submission.status = finalStatus;
     submission.submitted_at = new Date().toISOString();
+    submission.score = calculatedScore;
     this.writeState();
 
     return {
       success: true,
       status: finalStatus,
+      score: calculatedScore,
       alreadyFinalized: false,
     };
   }
