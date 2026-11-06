@@ -138,3 +138,4 @@ VALUES ('a0000000-0000-0000-0000-000000000001', ${order}, ${text}, ${visual}, ${
 
 fs.writeFileSync(outputPath, sql, 'utf8');
 console.log('Successfully generated schema.sql with', questions.length, 'questions.');
+
