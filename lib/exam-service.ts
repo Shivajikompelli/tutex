@@ -231,9 +231,7 @@ export async function registerOrResumeStudent(payload: RegistrationPayload) {
       questionPool = mockDb.getQuestions().filter((q) => q.exam_id === activeExam.id || q.exam_id === 'cyclotron-neet-001');
     }
     const shuffled = [...questionPool].sort(() => Math.random() - 0.5);
-    const targetCount = Math.min(45, shuffled.length);
-    const selected45 = shuffled.slice(0, targetCount);
-    const questionIds = selected45.map((q: any) => q.id);
+    const questionIds = shuffled.map((q: any) => q.id);
 
     // Create new submission record
     const now = new Date();
@@ -314,8 +312,6 @@ export async function getExamSession(submissionId: string) {
           return { ...q, question_order: idx + 1 };
         })
         .filter(Boolean);
-    } else {
-      orderedQuestions = orderedQuestions.slice(0, 45);
     }
 
     const { data: answersData, error: aError } = await supabase
@@ -572,7 +568,7 @@ export async function finalizeSubmission(
     (answersData || []).forEach((a: any) => {
       const q = qMap[a.question_id] || (mockDb as any).findQuestion?.(a.question_id);
       if (q && isOptionMatch(a.answer_text, q.correct_option)) {
-        calculatedScore += (q.marks || 1);
+        calculatedScore += (q.marks || 4);
       }
     });
 

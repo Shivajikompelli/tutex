@@ -50,7 +50,7 @@ function initDefaultState(): MockDatabaseState {
     visual_content: q.visual_content,
     options: q.options || [],
     correct_option: q.correct_option || 'A',
-    marks: q.marks || 1,
+    marks: q.marks || 4,
     created_at: new Date().toISOString(),
   }));
 
@@ -193,12 +193,10 @@ class MockDB {
       };
     }
 
-    // Jumble / shuffle questions and select 45 questions
+    // Jumble / shuffle questions
     const pool = this.state.questions.filter((q) => q.exam_id === exam.id);
     const shuffled = [...pool].sort(() => Math.random() - 0.5);
-    const targetCount = Math.min(45, shuffled.length);
-    const selected45 = shuffled.slice(0, targetCount);
-    const questionIds = selected45.map((q) => q.id);
+    const questionIds = shuffled.map((q) => q.id);
 
     // Create new submission
     const now = new Date();
@@ -252,7 +250,6 @@ class MockDB {
     } else {
       questions = this.state.questions
         .filter((q) => q.exam_id === submission.exam_id)
-        .slice(0, 45)
         .map((q, idx) => ({ ...q, question_order: idx + 1 }));
     }
 
@@ -379,7 +376,7 @@ class MockDB {
         subAnswers.forEach((a) => {
           const q = this.state.questions.find((item) => item.id === a.question_id);
           if (q && isOptionMatch(a.answer_text, q.correct_option)) {
-            calculatedScore += (q.marks || 1);
+            calculatedScore += (q.marks || 4);
           }
         });
         submission.score = calculatedScore;
@@ -414,7 +411,7 @@ class MockDB {
     subAnswers.forEach((a) => {
       const q = this.state.questions.find((item) => item.id === a.question_id);
       if (q && isOptionMatch(a.answer_text, q.correct_option)) {
-        calculatedScore += (q.marks || 1);
+        calculatedScore += (q.marks || 4);
       }
     });
 
@@ -457,7 +454,7 @@ class MockDB {
       subAnswers.forEach((a) => {
         const q = this.state.questions.find((item) => item.id === a.question_id);
         if (q && isOptionMatch(a.answer_text, q.correct_option)) {
-          score += (q.marks || 1);
+          score += (q.marks || 4);
         }
       });
 
@@ -472,7 +469,7 @@ class MockDB {
         answered_count: answeredCount,
         total_questions: totalQCount,
         score,
-        total_marks: totalQCount * 1,
+        total_marks: totalQCount * 4,
       };
     });
   }
@@ -494,7 +491,7 @@ class MockDB {
         })
         .filter((q): q is Question => q !== null);
     } else {
-      questions = this.state.questions.slice(0, 45).map((q, idx) => ({ ...q, question_order: idx + 1 }));
+      questions = this.state.questions.map((q, idx) => ({ ...q, question_order: idx + 1 }));
     }
 
     const answersList = this.state.answers.filter((a) => a.submission_id === submissionId);
@@ -508,7 +505,7 @@ class MockDB {
     questions.forEach((q) => {
       const selected = answersMap[q.id];
       if (isOptionMatch(selected, q.correct_option)) {
-        score += (q.marks || 1);
+        score += (q.marks || 4);
       }
     });
 
@@ -522,7 +519,7 @@ class MockDB {
       answers: answersMap,
       tab_events: tabEvents,
       score,
-      total_marks: questions.length * 1,
+      total_marks: questions.length * 4,
     };
   }
 

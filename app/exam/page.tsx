@@ -634,7 +634,7 @@ function ExamContent() {
                   Cyclotron Physics — NEET Series
                 </h1>
                 <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-indigo-50 text-indigo-700">
-                  45 MCQs • 45 Marks
+                  {questions.length} MCQs • {questions.length * 4} Marks
                 </span>
               </div>
               <p className="text-xs text-slate-500 truncate mt-0.5">
@@ -731,7 +731,7 @@ function ExamContent() {
 
                   <div className="flex items-center gap-2">
                     <span className="text-xs sm:text-sm font-bold px-3 py-1 bg-indigo-50 text-indigo-700 border border-indigo-100 rounded-lg">
-                      +{currentQuestion.marks || 1} Mark
+                      +{currentQuestion.marks || 4} Marks
                     </span>
                     {selectedOption && (
                       <button
@@ -854,7 +854,7 @@ function ExamContent() {
             <div className="border-b border-slate-100 pb-3 mb-3">
               <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center justify-between">
                 <span>Question Palette</span>
-                <span className="text-xs font-normal text-slate-500 lowercase">45 total</span>
+                <span className="text-xs font-normal text-slate-500 lowercase">{questions.length} total</span>
               </h3>
             </div>
 

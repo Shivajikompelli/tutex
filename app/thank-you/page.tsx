@@ -163,7 +163,7 @@ function ThankYouContent() {
                   Calculated Score:
                 </span>
                 <span className="font-extrabold text-base text-indigo-700">
-                  {typeof submission.score === 'number' ? submission.score : 0} / {questions.length * 1 || 45}
+                  {typeof submission.score === 'number' ? submission.score : 0} / {questions.length * 4 || 140}
                 </span>
               </div>
 

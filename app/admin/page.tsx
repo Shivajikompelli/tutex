@@ -299,7 +299,7 @@ export default function AdminPage() {
                 Highest Score
               </p>
               <p className="text-2xl font-black text-blue-700 mt-0.5">
-                {highestScore} <span className="text-xs font-semibold text-slate-400">/ 45</span>
+                {highestScore} <span className="text-xs font-semibold text-slate-400">/ {submissions[0]?.total_marks || 140}</span>
               </p>
             </div>
           </div>
@@ -381,7 +381,7 @@ export default function AdminPage() {
                         <td className="py-3.5 px-3 text-center">
                           <span className="inline-flex items-center gap-1 font-bold text-sm text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-lg">
                             <Award className="w-3.5 h-3.5" />
-                            {sub.score || 0} / {sub.total_marks || (sub.total_questions * 1)}
+                            {sub.score || 0} / {sub.total_marks || (sub.total_questions * 4)}
                           </span>
                         </td>
 
@@ -489,7 +489,7 @@ export default function AdminPage() {
                   {(() => {
                     const evaluatedScore = submissionDetail.questions.reduce((acc, q) => {
                       const ans = submissionDetail.answers[q.id];
-                      return acc + (isOptionMatch(ans, q.correct_option) ? (q.marks || 1) : 0);
+                      return acc + (isOptionMatch(ans, q.correct_option) ? (q.marks || 4) : 0);
                     }, 0);
 
                     const correctCount = submissionDetail.questions.filter((q) => {
@@ -502,7 +502,7 @@ export default function AdminPage() {
                         <div>
                           <span className="text-slate-500 font-medium">NEET Physics Score</span>
                           <p className="text-xl font-black text-indigo-700 mt-0.5">
-                            {evaluatedScore} / {submissionDetail.total_marks || (submissionDetail.questions.length * 1) || 45}
+                            {evaluatedScore} / {submissionDetail.total_marks || (submissionDetail.questions.length * 4) || 140}
                           </p>
                         </div>
                         <div>
@@ -582,12 +582,12 @@ export default function AdminPage() {
                               </span>
                               <div className="flex items-center gap-2">
                                 <span className="text-xs font-semibold px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md">
-                                  +{q.marks || 1} Mark
+                                  +{q.marks || 4} Marks
                                 </span>
                                 {isAttempted ? (
                                   isCorrect ? (
                                     <span className="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800">
-                                      +{q.marks || 1} Correct
+                                      +{q.marks || 4} Correct
                                     </span>
                                   ) : (
                                     <span className="px-2 py-0.5 rounded text-xs font-bold bg-red-100 text-red-800">

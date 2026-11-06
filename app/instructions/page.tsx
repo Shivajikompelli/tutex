@@ -144,7 +144,7 @@ function InstructionsContent() {
             </div>
             <div className="col-span-2 sm:col-span-1">
               <p className="text-slate-500 font-medium">Pattern & Total</p>
-              <p className="font-bold text-slate-800 mt-0.5">{questions.length} MCQs (+1 Mark each)</p>
+              <p className="font-bold text-slate-800 mt-0.5">{questions.length} MCQs (+4 Marks each)</p>
             </div>
           </div>
         </div>
@@ -164,7 +164,7 @@ function InstructionsContent() {
                 <h3 className="font-semibold text-slate-900">NEET MCQ Format & Scoring</h3>
                 <p className="mt-0.5 text-slate-600">
                   Each question has 4 options (A, B, C, D). Select one option per question. Each
-                  correct question awards <strong>+1 mark</strong> (Total: 45 Marks). You can change your selected
+                  correct question awards <strong>+4 marks</strong> (Total: {questions.length * 4} Marks). You can change your selected
                   option anytime or clear your response before final submission.
                 </p>
               </div>

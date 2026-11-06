@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS questions (
   visual_content TEXT,
   options JSONB NOT NULL DEFAULT '[]'::jsonb,
   correct_option TEXT NOT NULL DEFAULT 'A',
-  marks INTEGER NOT NULL DEFAULT 1,
+  marks INTEGER NOT NULL DEFAULT 4,
   created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now())
 );
 

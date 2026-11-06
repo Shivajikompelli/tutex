@@ -55,12 +55,12 @@ export async function getAllSubmissionsSummary(): Promise<SubmissionAdminSummary
       (sub.answers || []).forEach((a: any) => {
         const q = questionMap[a.question_id] || mockDb.findQuestion(a.question_id);
         if (q && isOptionMatch(a.answer_text, q.correct_option)) {
-          calculatedScore += (q.marks || 1);
+          calculatedScore += (q.marks || 4);
         }
       });
 
       const finalScore = Math.max(score, calculatedScore);
-      const totalQ = questionsByExam[sub.exam?.id] || 45;
+      const totalQ = questionsByExam[sub.exam?.id] || questionsList.length || 35;
 
       return {
         id: sub.id,
@@ -73,7 +73,7 @@ export async function getAllSubmissionsSummary(): Promise<SubmissionAdminSummary
         answered_count: answeredCount,
         total_questions: totalQ,
         score: finalScore,
-        total_marks: totalQ * 1,
+        total_marks: totalQ * 4,
       };
     });
   } catch (e) {
@@ -118,7 +118,7 @@ export async function getSubmissionDetail(submissionId: string): Promise<Submiss
     questionsList.forEach((q) => {
       const userAns = answersMap[q.id];
       if (isOptionMatch(userAns, q.correct_option)) {
-        score += (q.marks || 1);
+        score += (q.marks || 4);
       }
     });
 
@@ -136,7 +136,7 @@ export async function getSubmissionDetail(submissionId: string): Promise<Submiss
       answers: answersMap,
       tab_events: tabEvents || [],
       score,
-      total_marks: questionsList.length * 1,
+      total_marks: questionsList.length * 4,
     };
   } catch (e) {
     return mockDb.getSubmissionDetail(submissionId);
