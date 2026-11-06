@@ -65,16 +65,22 @@ export async function registerOrResumeStudent(payload: RegistrationPayload) {
     }
 
     const candidatePhone = payload.phone.trim();
+    const phoneDigits = candidatePhone.replace(/\D/g, '');
+    const phone10 = phoneDigits.length >= 10 ? phoneDigits.slice(-10) : phoneDigits;
     const trimmedRoll = (payload.roll_number || candidatePhone).trim().toUpperCase();
     const trimmedEmail = payload.email.trim().toLowerCase();
     const candidateCollege = (payload.college || 'Intermediate').trim();
     const candidateBranch = (payload.branch || 'NEET Preparation').trim();
 
-    // Check if student exists with this roll number or email
+    // Check if student exists matching email OR matching last 10 digits of phone or roll_number
+    const orFilter = phone10.length >= 7 
+      ? `email.ilike.${trimmedEmail},phone.ilike.%${phone10}%,roll_number.ilike.%${phone10}%`
+      : `email.ilike.${trimmedEmail},phone.ilike.${candidatePhone}`;
+
     const { data: existingStudents, error: studentSearchError } = await supabase
       .from('students')
       .select('*')
-      .or(`roll_number.ilike.${trimmedRoll},email.ilike.${trimmedEmail}`);
+      .or(orFilter);
 
     if (studentSearchError) {
       if (shouldFallbackToMock(studentSearchError.message)) {
@@ -83,21 +89,53 @@ export async function registerOrResumeStudent(payload: RegistrationPayload) {
       throw new Error(`Database error while searching student: ${studentSearchError.message}`);
     }
 
-    let student = existingStudents && existingStudents.length > 0 ? existingStudents[0] : null;
+    const matchedStudents = existingStudents || [];
+    let student = matchedStudents.length > 0 ? matchedStudents[0] : null;
 
     if (student) {
-      // If student exists but entered mismatched roll number or email
-      if (
-        student.roll_number.toUpperCase() !== trimmedRoll &&
-        student.email.toLowerCase() === trimmedEmail
-      ) {
-        throw new Error(`The email "${trimmedEmail}" is already registered under a different Mobile Number.`);
+      // If student matched, verify for existing submissions across ALL matching student records
+      const allStudentIds = matchedStudents.map((s) => s.id);
+      const { data: existingSubmissions, error: subError } = await supabase
+        .from('submissions')
+        .select('*')
+        .in('student_id', allStudentIds)
+        .order('created_at', { ascending: false });
+
+      if (subError && shouldFallbackToMock(subError.message)) {
+        return mockDb.registerOrResumeStudent(payload);
       }
-      if (
-        student.roll_number.toUpperCase() === trimmedRoll &&
-        student.email.toLowerCase() !== trimmedEmail
-      ) {
-        throw new Error(`The Mobile Number "${trimmedRoll}" is already registered under a different Email.`);
+
+      if (existingSubmissions && existingSubmissions.length > 0) {
+        const existingSub = existingSubmissions[0];
+        const isCompleted = existingSub.status !== 'in_progress';
+        const expiresAtMs = new Date(existingSub.expires_at).getTime();
+        const isTimeExpired = Date.now() > expiresAtMs + 30 * 1000;
+
+        if (isCompleted || isTimeExpired) {
+          if (!isCompleted && isTimeExpired) {
+            await supabase
+              .from('submissions')
+              .update({
+                status: 'auto_submitted_time',
+                submitted_at: new Date().toISOString(),
+              })
+              .eq('id', existingSub.id);
+          }
+          return {
+            alreadySubmitted: true,
+            submissionId: existingSub.id,
+            examTitle: activeExam.title,
+            status: existingSub.status === 'in_progress' ? 'auto_submitted_time' : existingSub.status,
+          };
+        }
+
+        return {
+          alreadySubmitted: false,
+          isResuming: true,
+          submissionId: existingSub.id,
+          examId: activeExam.id,
+          studentId: student.id,
+        };
       }
 
       // Update student details if name, phone, etc. updated
@@ -134,13 +172,12 @@ export async function registerOrResumeStudent(payload: RegistrationPayload) {
       student = newStudent;
     }
 
-    // Check existing submission for this student and exam
-    const { data: existingSubmission, error: subError } = await supabase
+    // Check existing submission for this student (ANY submission)
+    const { data: existingSubmissions, error: subError } = await supabase
       .from('submissions')
       .select('*')
-      .eq('exam_id', activeExam.id)
       .eq('student_id', student.id)
-      .maybeSingle();
+      .order('created_at', { ascending: false });
 
     if (subError) {
       if (shouldFallbackToMock(subError.message)) {
@@ -148,6 +185,8 @@ export async function registerOrResumeStudent(payload: RegistrationPayload) {
       }
       throw new Error(`Failed to check existing submission: ${subError.message}`);
     }
+
+    const existingSubmission = existingSubmissions && existingSubmissions.length > 0 ? existingSubmissions[0] : null;
 
     if (existingSubmission) {
       const isCompleted = existingSubmission.status !== 'in_progress';
@@ -432,14 +471,25 @@ export async function recordTabViolation(
       const shouldAutoSubmit = newCount >= 3;
       const newStatus: SubmissionStatus = shouldAutoSubmit ? 'auto_submitted_tabs' : 'in_progress';
 
-      await supabase
-        .from('submissions')
-        .update({
-          tab_switch_count: newCount,
-          status: newStatus,
-          ...(shouldAutoSubmit ? { submitted_at: new Date().toISOString() } : {}),
-        })
-        .eq('id', submissionId);
+      if (shouldAutoSubmit) {
+        await supabase
+          .from('submissions')
+          .update({
+            tab_switch_count: newCount,
+            status: newStatus,
+            submitted_at: new Date().toISOString(),
+          })
+          .eq('id', submissionId);
+        await finalizeSubmission(submissionId, 'tab_violations');
+      } else {
+        await supabase
+          .from('submissions')
+          .update({
+            tab_switch_count: newCount,
+            status: newStatus,
+          })
+          .eq('id', submissionId);
+      }
 
       return {
         tabSwitchCount: newCount,

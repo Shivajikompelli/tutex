@@ -128,17 +128,20 @@ class MockDB {
     const trimmedPhone = payload.phone.trim();
     const trimmedEmail = payload.email.trim().toLowerCase();
 
-    // Check existing student
+    const phoneDigits = trimmedPhone.replace(/\D/g, '');
+    const phone10 = phoneDigits.length >= 10 ? phoneDigits.slice(-10) : phoneDigits;
+
+    // Check existing student by email or last 10 digits of phone or roll_number
     let student = this.state.students.find(
       (s) =>
         s.email.toLowerCase() === trimmedEmail ||
-        s.phone === trimmedPhone
+        (phone10.length >= 7 && (
+          s.phone.replace(/\D/g, '').endsWith(phone10) ||
+          s.roll_number.replace(/\D/g, '').endsWith(phone10)
+        ))
     );
 
     if (student) {
-      if (student.email.toLowerCase() === trimmedEmail && student.phone !== trimmedPhone) {
-        throw new Error(`The email "${trimmedEmail}" is already registered under mobile number ${student.phone}.`);
-      }
       student.name = payload.name.trim();
     } else {
       student = {
@@ -154,9 +157,9 @@ class MockDB {
       this.state.students.push(student);
     }
 
-    // Check existing submission
+    // Check if student already has ANY submission
     const existingSubmission = this.state.submissions.find(
-      (sub) => sub.exam_id === exam.id && sub.student_id === student!.id
+      (sub) => sub.student_id === student!.id
     );
 
     const GRACE_PERIOD_MS = 30 * 1000;
@@ -285,6 +288,10 @@ class MockDB {
     };
   }
 
+  public findQuestion(id: string): Question | undefined {
+    return this.state.questions.find((q) => q.id === id);
+  }
+
   public saveExamAnswer(submissionId: string, questionId: string, selectedOption: string) {
     const submission = this.state.submissions.find((s) => s.id === submissionId);
     if (!submission) throw new Error('Submission not found.');
@@ -363,6 +370,15 @@ class MockDB {
       submission.status = newStatus;
       if (shouldAutoSubmit) {
         submission.submitted_at = new Date().toISOString();
+        const subAnswers = this.state.answers.filter((a) => a.submission_id === submissionId);
+        let calculatedScore = 0;
+        subAnswers.forEach((a) => {
+          const q = this.state.questions.find((item) => item.id === a.question_id);
+          if (q && isOptionMatch(a.answer_text, q.correct_option)) {
+            calculatedScore += (q.marks || 1);
+          }
+        });
+        submission.score = calculatedScore;
       }
 
       this.writeState();

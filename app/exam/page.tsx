@@ -56,6 +56,7 @@ function ExamContent() {
   // UI Modals
   const [showSubmitModal, setShowSubmitModal] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isViolationLockout, setIsViolationLockout] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // References
@@ -67,6 +68,7 @@ function ExamContent() {
   currentIndexRef.current = currentIndex;
   const subIdRef = useRef(submissionId);
   subIdRef.current = submissionId;
+  const departureTimestampRef = useRef<number>(0);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -262,11 +264,16 @@ function ExamContent() {
           submission_id: subId,
           reason,
         }),
+        keepalive: true,
       });
 
-      router.push(`/thank-you?submission_id=${encodeURIComponent(subId!)}`);
+      if (typeof window !== 'undefined') {
+        window.location.replace(`/thank-you?submission_id=${encodeURIComponent(subId!)}`);
+      }
     } catch (err: any) {
-      router.push(`/thank-you?submission_id=${encodeURIComponent(subId!)}`);
+      if (typeof window !== 'undefined') {
+        window.location.replace(`/thank-you?submission_id=${encodeURIComponent(subId!)}`);
+      }
     }
   };
 
@@ -276,7 +283,7 @@ function ExamContent() {
       if (loading || isSubmitting) return;
 
       const now = Date.now();
-      if (now - lastSwitchEventTime.current < 1500) {
+      if (now - lastSwitchEventTime.current < 1200) {
         return;
       }
       lastSwitchEventTime.current = now;
@@ -293,20 +300,22 @@ function ExamContent() {
             event_type: eventType,
             details: `Detected at ${new Date().toISOString()}`,
           }),
+          keepalive: true,
         });
 
         const data = await res.json();
+        const currentCount = data.tabSwitchCount ?? (tabSwitchCount + 1);
 
-        if (data.autoSubmitted || data.tabSwitchCount >= 3) {
+        if (data.autoSubmitted || currentCount >= 3) {
           setShowWarningModal(false);
-          alert('Test auto-submitted: You have exceeded the maximum allowed (3) tab switch warnings.');
+          setIsViolationLockout(true);
+          // Auto submit immediately on reaching 3 violations without blocking alert()
           handleFinalSubmit('tab_violations');
           return;
         }
 
-        const newCount = data.tabSwitchCount || tabSwitchCount + 1;
-        setTabSwitchCount(newCount);
-        setWarningMessage(`Warning ${newCount} of 3. Tab switching is recorded.`);
+        setTabSwitchCount(currentCount);
+        setWarningMessage(`Warning ${currentCount} of 3: Tab or app switching is strictly prohibited.`);
         setShowWarningModal(true);
       } catch (e) {
         console.warn('Failed to log tab switch event:', e);
@@ -318,14 +327,42 @@ function ExamContent() {
   useEffect(() => {
     if (loading) return;
 
-    const onVisibilityChange = () => {
-      if (document.hidden) {
-        handleTabSwitchEvent('visibility_hidden');
+    const onDeparture = (type: 'visibility_hidden' | 'window_blur') => {
+      departureTimestampRef.current = Date.now();
+    };
+
+    const onReturn = (type: 'visibility_hidden' | 'window_blur') => {
+      const elapsed = Date.now() - departureTimestampRef.current;
+      if (departureTimestampRef.current > 0 && elapsed > 400) {
+        departureTimestampRef.current = 0;
+        handleTabSwitchEvent(type);
       }
     };
 
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        onDeparture('visibility_hidden');
+        handleTabSwitchEvent('visibility_hidden');
+      } else {
+        onReturn('visibility_hidden');
+      }
+    };
+
+    const onPageHide = () => {
+      onDeparture('visibility_hidden');
+    };
+
+    const onPageShow = () => {
+      onReturn('visibility_hidden');
+    };
+
     const onWindowBlur = () => {
+      onDeparture('window_blur');
       handleTabSwitchEvent('window_blur');
+    };
+
+    const onWindowFocus = () => {
+      onReturn('window_blur');
     };
 
     const onFullscreenChange = () => {
@@ -337,13 +374,19 @@ function ExamContent() {
     };
 
     document.addEventListener('visibilitychange', onVisibilityChange);
+    window.addEventListener('pagehide', onPageHide);
+    window.addEventListener('pageshow', onPageShow);
     window.addEventListener('blur', onWindowBlur);
+    window.addEventListener('focus', onWindowFocus);
     document.addEventListener('fullscreenchange', onFullscreenChange);
     document.addEventListener('webkitfullscreenchange', onFullscreenChange);
 
     return () => {
       document.removeEventListener('visibilitychange', onVisibilityChange);
+      window.removeEventListener('pagehide', onPageHide);
+      window.removeEventListener('pageshow', onPageShow);
       window.removeEventListener('blur', onWindowBlur);
+      window.removeEventListener('focus', onWindowFocus);
       document.removeEventListener('fullscreenchange', onFullscreenChange);
       document.removeEventListener('webkitfullscreenchange', onFullscreenChange);
     };
@@ -465,7 +508,7 @@ function ExamContent() {
       )}
 
       {/* FULL-SCREEN TAB-SWITCH WARNING MODAL */}
-      {showWarningModal && (
+      {showWarningModal && !isViolationLockout && (
         <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border-4 border-amber-500 text-center animate-in fade-in zoom-in duration-150">
             <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -491,6 +534,32 @@ function ExamContent() {
             >
               I Understand & Resume Test
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* FULL-SCREEN 3RD VIOLATION LOCKOUT MODAL (NON-CLOSABLE) */}
+      {isViolationLockout && (
+        <div className="fixed inset-0 z-50 bg-red-950/90 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border-4 border-red-600 text-center animate-in fade-in zoom-in duration-150">
+            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <ShieldAlert className="w-10 h-10 text-red-600 animate-pulse" />
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black text-red-950 tracking-tight">
+              MAXIMUM VIOLATIONS (3) REACHED
+            </h2>
+            <div className="my-4 p-3.5 bg-red-50 border border-red-300 rounded-xl">
+              <p className="text-base font-bold text-red-900">
+                Examination Terminated due to Proctoring Policy
+              </p>
+            </div>
+            <p className="text-sm text-slate-700 leading-relaxed mb-6">
+              You have accumulated 3 tab or app switch warnings. Your responses are being recorded and the exam is being automatically submitted.
+            </p>
+            <div className="flex items-center justify-center gap-2.5 text-indigo-700 font-bold text-sm bg-indigo-50 py-3 rounded-xl border border-indigo-200">
+              <Loader2 className="w-5 h-5 animate-spin text-indigo-600" />
+              Finalizing & Submitting Exam...
+            </div>
           </div>
         </div>
       )}

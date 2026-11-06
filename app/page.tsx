@@ -129,50 +129,56 @@ export default function RegistrationPage() {
           </p>
         </div>
 
-        {/* Already Submitted Warning Modal / Box */}
-        {alreadySubmittedInfo && (
-          <div className="mb-6 p-5 bg-amber-50 border border-amber-300 rounded-xl text-amber-900 shadow-sm">
-            <div className="flex items-start gap-3">
-              <AlertCircle className="w-6 h-6 text-amber-600 shrink-0 mt-0.5" />
-              <div>
-                <h3 className="text-base font-bold text-amber-900">
-                  Attempt Already Registered
-                </h3>
-                <p className="mt-1 text-sm text-amber-800">
-                  A submission record for <span className="font-semibold">{formData.email}</span> (
-                  <span className="font-semibold">{formData.phone}</span>) has already been finalized
-                  for <span className="font-semibold">{alreadySubmittedInfo.examTitle}</span>.
-                </p>
-                <p className="mt-2 text-xs font-medium text-amber-700">
-                  Status: {alreadySubmittedInfo.status.toUpperCase()}
-                </p>
-                <div className="mt-4">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      router.push(`/thank-you?submission_id=${alreadySubmittedInfo.submissionId}`)
-                    }
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold rounded-lg shadow-sm transition"
-                  >
-                    View Test Receipt
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
+        {/* Conditional View: Either Locked Attempt Notice OR Registration Form */}
+        {alreadySubmittedInfo ? (
+          <div className="bg-white border-2 border-red-200 shadow-md rounded-2xl p-6 sm:p-8 text-center">
+            <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <AlertCircle className="w-9 h-9" />
+            </div>
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2">
+              Attempt Already Completed
+            </h2>
+            <p className="text-sm text-slate-600 mb-5 leading-relaxed">
+              A completed submission record already exists for candidate{' '}
+              <span className="font-semibold text-slate-900">{formData.email}</span> (
+              <span className="font-semibold text-slate-900">{formData.phone}</span>).
+            </p>
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-6 text-xs sm:text-sm text-slate-700 text-left space-y-2">
+              <div className="flex justify-between">
+                <span className="text-slate-500">Exam:</span>
+                <span className="font-semibold text-slate-900">{alreadySubmittedInfo.examTitle}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Status:</span>
+                <span className="uppercase text-red-600 font-bold tracking-wide">{alreadySubmittedInfo.status}</span>
+              </div>
+              <div className="pt-2 border-t border-slate-200 text-xs text-amber-700 font-medium">
+                ⚠️ Re-attempts are strictly disabled. Each student is allowed only one attempt.
               </div>
             </div>
+            <button
+              type="button"
+              onClick={() =>
+                router.push(`/thank-you?submission_id=${alreadySubmittedInfo.submissionId}`)
+              }
+              className="w-full flex items-center justify-center gap-2 py-3.5 px-5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow transition"
+            >
+              View Submission Receipt & Results
+              <ArrowRight className="w-4 h-4" />
+            </button>
           </div>
-        )}
+        ) : (
+          <>
+            {/* Server Error Message */}
+            {serverError && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-800 text-sm flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                <p className="font-medium">{serverError}</p>
+              </div>
+            )}
 
-        {/* Server Error Message */}
-        {serverError && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-800 text-sm flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
-            <p className="font-medium">{serverError}</p>
-          </div>
-        )}
-
-        {/* Registration Form Card */}
-        <div className="bg-white border border-slate-200 shadow-sm rounded-2xl p-6 sm:p-8">
+            {/* Registration Form Card */}
+            <div className="bg-white border border-slate-200 shadow-sm rounded-2xl p-6 sm:p-8">
           <form onSubmit={handleSubmit} noValidate className="space-y-5">
             {/* 1. Full Name */}
             <div>
@@ -286,17 +292,9 @@ export default function RegistrationPage() {
             </button>
           </form>
         </div>
-
-        {/* Footer Admin Link */}
-        <div className="mt-6 text-center">
-          <a
-            href="/admin"
-            className="text-xs text-slate-500 hover:text-slate-800 underline transition"
-          >
-            Academy Faculty / Admin Login
-          </a>
-        </div>
-      </div>
-    </main>
-  );
+      </>
+    )}
+  </div>
+</main>
+);
 }

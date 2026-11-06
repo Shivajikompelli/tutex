@@ -52,7 +52,7 @@ export async function getAllSubmissionsSummary(): Promise<SubmissionAdminSummary
       let score = typeof sub.score === 'number' ? sub.score : 0;
       let calculatedScore = 0;
       (sub.answers || []).forEach((a: any) => {
-        const q = questionMap[a.question_id];
+        const q = questionMap[a.question_id] || mockDb.findQuestion(a.question_id);
         if (q && isOptionMatch(a.answer_text, q.correct_option)) {
           calculatedScore += (q.marks || 1);
         }
