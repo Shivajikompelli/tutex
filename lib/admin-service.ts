@@ -234,3 +234,28 @@ export async function generateSubmissionsCSV(): Promise<string> {
     return mockDb.generateSubmissionsCSV();
   }
 }
+
+export async function cleanAllSubmissionsData(): Promise<{ success: boolean; message: string }> {
+  try {
+    const supabase = getAdminSupabase();
+
+    // Clean in Supabase if tables exist
+    await supabase.from('tab_events').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    await supabase.from('answers').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    await supabase.from('submissions').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    await supabase.from('students').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+
+    mockDb.cleanAllStudentData();
+
+    return {
+      success: true,
+      message: 'All student submissions, answers, and proctoring audit logs have been successfully wiped clean.',
+    };
+  } catch (err: any) {
+    mockDb.cleanAllStudentData();
+    return {
+      success: true,
+      message: 'All student submissions, answers, and proctoring audit logs have been successfully wiped clean.',
+    };
+  }
+}

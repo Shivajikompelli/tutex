@@ -18,6 +18,7 @@ import {
   Atom,
   Award,
   Check,
+  Trash2,
 } from 'lucide-react';
 import { SubmissionAdminSummary, SubmissionDetail, isOptionMatch } from '@/lib/types';
 
@@ -115,6 +116,30 @@ export default function AdminPage() {
 
   const handleExportCSV = () => {
     window.location.href = '/api/admin/export-csv';
+  };
+
+  const [isCleaning, setIsCleaning] = useState<boolean>(false);
+
+  const handleCleanData = async () => {
+    const confirmed = window.confirm(
+      'Are you sure you want to clean all test submissions and student records? This resets student attempts so fresh candidates can take the exam.'
+    );
+    if (!confirmed) return;
+
+    setIsCleaning(true);
+    try {
+      const res = await fetch('/api/admin/clean-data', {
+        method: 'POST',
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to wipe data.');
+      alert(data.message || 'All test submissions have been wiped clean.');
+      fetchSubmissions();
+    } catch (err: any) {
+      alert(err.message || 'Failed to clean data.');
+    } finally {
+      setIsCleaning(false);
+    }
   };
 
   const filteredSubmissions = submissions.filter((s) => {
@@ -215,6 +240,15 @@ export default function AdminPage() {
             >
               <Download className="w-4 h-4" />
               Export All to CSV
+            </button>
+
+            <button
+              onClick={handleCleanData}
+              disabled={isCleaning}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 text-xs sm:text-sm font-semibold rounded-xl transition cursor-pointer disabled:opacity-50"
+            >
+              <Trash2 className="w-4 h-4" />
+              {isCleaning ? 'Cleaning...' : 'Clean Test Data'}
             </button>
 
             <button

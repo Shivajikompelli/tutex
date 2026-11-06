@@ -108,6 +108,15 @@ class MockDB {
     }
   }
 
+  public cleanAllStudentData() {
+    this.state.students = [];
+    this.state.submissions = [];
+    this.state.answers = [];
+    this.state.tab_events = [];
+    this.writeState();
+    return { success: true, message: 'All student records cleared.' };
+  }
+
   public getActiveExam(): Exam | null {
     return this.state.exams.find((e) => e.is_active) || this.state.exams[0] || null;
   }
@@ -400,6 +409,7 @@ class MockDB {
   }
 
   public getAllSubmissionsSummary(): SubmissionAdminSummary[] {
+    this.state = this.readState();
     return this.state.submissions.map((sub) => {
       const student = this.state.students.find((s) => s.id === sub.student_id)!;
       const exam = this.state.exams.find((e) => e.id === sub.exam_id)!;
