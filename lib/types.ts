@@ -46,6 +46,7 @@ export interface Submission {
   submitted_at: string | null;
   tab_switch_count: number;
   question_ids?: string[];
+  score?: number;
   created_at: string;
 }
 
